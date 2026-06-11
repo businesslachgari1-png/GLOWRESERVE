@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { API_URL } from '../config';
 
 const MyAppointmentsPage = () => {
     const { token } = useAuth();
@@ -17,7 +18,7 @@ const MyAppointmentsPage = () => {
 
     const fetchAppointments = async () => {
         try {
-            const response = await fetch('http://localhost:8000/api/my-appointments', {
+            const response = await fetch(`${API_URL}/my-appointments`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Accept': 'application/json',
@@ -35,7 +36,7 @@ const MyAppointmentsPage = () => {
     const cancelAppointment = async (id) => {
         if (!confirm('Êtes-vous sûr de vouloir annuler ce rendez-vous ?')) return;
         try {
-            const response = await fetch(`http://localhost:8000/api/appointments/${id}/cancel`, {
+            const response = await fetch(`${API_URL}/appointments/${id}/cancel`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -52,7 +53,7 @@ const MyAppointmentsPage = () => {
         e.preventDefault();
         setSubmittingReview(true);
         try {
-            const response = await fetch('http://localhost:8000/api/reviews', {
+            const response = await fetch(`${API_URL}/reviews`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

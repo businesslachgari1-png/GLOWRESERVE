@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { API_URL } from '../config';
 
 const SalonDashboard = () => {
     const { token } = useAuth();
@@ -25,7 +26,7 @@ const SalonDashboard = () => {
 
     const fetchSalon = async () => {
         try {
-            const response = await fetch('http://localhost:8000/api/salon-management/my-salon', {
+            const response = await fetch(`${API_URL}/salon-management/my-salon`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Accept': 'application/json',
@@ -53,7 +54,7 @@ const SalonDashboard = () => {
 
     const fetchAppointments = async () => {
         try {
-            const response = await fetch('http://localhost:8000/api/salon-management/appointments', {
+            const response = await fetch(`${API_URL}/salon-management/appointments`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Accept': 'application/json',
@@ -79,7 +80,7 @@ const SalonDashboard = () => {
             if (newService.category) formData.append('category', newService.category);
             if (serviceImage) formData.append('image', serviceImage);
 
-            const response = await fetch('http://localhost:8000/api/salon-management/services', {
+            const response = await fetch(`${API_URL}/salon-management/services`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -101,7 +102,7 @@ const SalonDashboard = () => {
     const addStaff = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:8000/api/salon-management/employees', {
+            const response = await fetch(`${API_URL}/salon-management/employees`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -123,7 +124,7 @@ const SalonDashboard = () => {
     const updateSalonProfile = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:8000/api/salon-management/salon', {
+            const response = await fetch(`${API_URL}/salon-management/salon`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -145,7 +146,7 @@ const SalonDashboard = () => {
 
     const updateAppointmentStatus = async (id, status) => {
         try {
-            const response = await fetch(`http://localhost:8000/api/salon-management/appointments/${id}/status`, {
+            const response = await fetch(`${API_URL}/salon-management/appointments/${id}/status`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -318,7 +319,7 @@ const SalonDashboard = () => {
                                         <div key={service.id} style={{ padding: '1.5rem', background: 'white', border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)', display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
                                             {service.image_url ? (
                                                 <div style={{ width: '80px', height: '80px', borderRadius: 'var(--radius-sm)', overflow: 'hidden', flexShrink: 0 }}>
-                                                    <img src={`http://localhost:8000${service.image_url}`} alt={service.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                                    <img src={`${API_URL.replace('/api', '')}${service.image_url}`} alt={service.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                                 </div>
                                             ) : (
                                                 <div style={{ width: '80px', height: '80px', borderRadius: 'var(--radius-sm)', background: 'var(--bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>

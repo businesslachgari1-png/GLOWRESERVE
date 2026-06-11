@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { API_URL } from '../config';
 
 const SalonDetailPage = () => {
     const { user, token } = useAuth();
@@ -28,17 +29,17 @@ const SalonDetailPage = () => {
 
     const fetchSalon = async () => {
         try {
-            const response = await fetch(`http://localhost:8000/api/salons/${slug}`);
+            const response = await fetch(`${API_URL}/salons/${slug}`);
             const data = await response.json();
             setSalon(data);
 
-            const reviewsResponse = await fetch(`http://localhost:8000/api/salons/${data.id}/reviews`);
+            const reviewsResponse = await fetch(`${API_URL}/salons/${data.id}/reviews`);
             const reviewsData = await reviewsResponse.json();
             setReviews(reviewsData);
 
             // Eligibility for leaving a review (only after completed appointments)
             if (token) {
-                const aptRes = await fetch(`http://localhost:8000/api/salons/${data.id}/completed-appointments`, {
+                const aptRes = await fetch(`${API_URL}/salons/${data.id}/completed-appointments`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Accept': 'application/json',
@@ -90,7 +91,7 @@ const SalonDetailPage = () => {
 
         setSubmittingReview(true);
         try {
-            const response = await fetch('http://localhost:8000/api/reviews', {
+            const response = await fetch(`${API_URL}/reviews`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -108,7 +109,7 @@ const SalonDetailPage = () => {
                 setReviewModalOpen(false);
                 setNewReview({ rating: 5, comment: '' });
                 // re-fetch reviews
-                const reviewsResponse = await fetch(`http://localhost:8000/api/salons/${salon.id}/reviews`);
+                const reviewsResponse = await fetch(`${API_URL}/salons/${salon.id}/reviews`);
                 const reviewsData = await reviewsResponse.json();
                 setReviews(reviewsData);
                 alert('MERCI POUR VOTRE AVIS !');
@@ -185,7 +186,7 @@ const SalonDetailPage = () => {
                                 onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--border)'}>
                                 {service.image_url && (
                                     <div style={{ width: '80px', height: '80px', borderRadius: 'var(--radius-sm)', overflow: 'hidden', flexShrink: 0 }}>
-                                        <img src={`http://localhost:8000${service.image_url}`} alt={service.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                        <img src={`${API_URL.replace('/api', '')}${service.image_url}`} alt={service.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                     </div>
                                 )}
                                 <div style={{ flex: 1 }}>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { API_URL } from '../config';
 
 const SalonsPage = () => {
     const [salons, setSalons] = useState([]);
@@ -18,7 +19,7 @@ const SalonsPage = () => {
 
     const fetchSalons = async () => {
         try {
-            const response = await fetch('http://localhost:8000/api/salons');
+            const response = await fetch(`${API_URL}/salons`);
             const result = await response.json();
             const salonsList = result.data || [];
             setSalons(salonsList);

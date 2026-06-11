@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { API_URL } from '../config';
 
 const BookingPage = () => {
     const { slug } = useParams();
@@ -31,7 +32,7 @@ const BookingPage = () => {
 
     const fetchSalon = async () => {
         try {
-            const response = await fetch(`http://localhost:8000/api/salons/${slug}`);
+            const response = await fetch(`${API_URL}/salons/${slug}`);
             const data = await response.json();
             setSalon(data);
         } catch (error) {
@@ -53,7 +54,7 @@ const BookingPage = () => {
                 Accept: 'application/json',
                 ...(token ? { Authorization: `Bearer ${token}` } : {})
             };
-            const response = await fetch(`http://localhost:8000/api/appointments/available-slots?${params}`, { headers });
+            const response = await fetch(`${API_URL}/appointments/available-slots?${params}`, { headers });
             const data = await response.json();
             if (!response.ok) {
                 setSlotsError(data?.error || 'Impossible de charger les créneaux.');
@@ -88,7 +89,7 @@ const BookingPage = () => {
                 bodyData.employee_id = selectedEmployee.id;
             }
 
-            const response = await fetch('http://localhost:8000/api/appointments', {
+            const response = await fetch(`${API_URL}/appointments`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -160,7 +161,7 @@ const BookingPage = () => {
                                     >
                                         {service.image_url && (
                                             <div style={{ width: '60px', height: '60px', borderRadius: 'var(--radius-sm)', overflow: 'hidden', flexShrink: 0 }}>
-                                                <img src={`http://localhost:8000${service.image_url}`} alt={service.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                                <img src={`${API_URL.replace('/api', '')}${service.image_url}`} alt={service.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                             </div>
                                         )}
                                         <div style={{ flex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
